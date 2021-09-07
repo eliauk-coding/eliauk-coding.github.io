@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://eliauk2021.github.io/golang/start/</loc>
+    <lastmod>2021-09-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://eliauk2021.github.io/project/project1/</loc>
   </url><url>
     <loc>https://eliauk2021.github.io/project/project2/</loc>
@@ -10,25 +13,28 @@
   </url><url>
     <loc>https://eliauk2021.github.io/project/project4/</loc>
   </url><url>
+    <loc>https://eliauk2021.github.io/tags/golang/</loc>
+    <lastmod>2021-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://eliauk2021.github.io/golang/</loc>
+    <lastmod>2021-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://eliauk2021.github.io/tags/</loc>
+    <lastmod>2021-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://eliauk2021.github.io/</loc>
+    <lastmod>2021-09-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://eliauk2021.github.io/post/creating-a-new-theme/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://eliauk2021.github.io/tags/go/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://eliauk2021.github.io/tags/golang/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://eliauk2021.github.io/tags/hugo/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://eliauk2021.github.io/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://eliauk2021.github.io/post/</loc>
-    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://eliauk2021.github.io/tags/</loc>
     <lastmod>2014-09-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://eliauk2021.github.io/tags/themes/</loc>
@@ -55,8 +61,6 @@
     <loc>https://eliauk2021.github.io/tags/static-site-generator/</loc>
     <lastmod>2014-03-10T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://eliauk2021.github.io/about/</loc>
-  </url><url>
     <loc>https://eliauk2021.github.io/tags/bootstrap/</loc>
   </url><url>
     <loc>https://eliauk2021.github.io/categories/</loc>
@@ -74,5 +78,7 @@
     <loc>https://eliauk2021.github.io/tags/responsive/</loc>
   </url><url>
     <loc>https://eliauk2021.github.io/tags/syntax-highlighting/</loc>
+  </url><url>
+    <loc>https://eliauk2021.github.io/about/</loc>
   </url>
 </urlset>
