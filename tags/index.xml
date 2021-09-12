@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on 山海</title>
+    <title>Tags on Coder Memo</title>
     <link>https://eliauk2021.github.io/tags/</link>
-    <description>Recent content in Tags on 山海</description>
+    <description>Recent content in Tags on Coder Memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 07 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://eliauk2021.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
@@ -17,128 +17,191 @@
     </item>
     
     <item>
-      <title>go</title>
-      <link>https://eliauk2021.github.io/tags/go/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>disqus</title>
+      <link>https://eliauk2021.github.io/tags/disqus/</link>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/tags/go/</guid>
+      <guid>https://eliauk2021.github.io/tags/disqus/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>hugo</title>
-      <link>https://eliauk2021.github.io/tags/hugo/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>google analytics</title>
+      <link>https://eliauk2021.github.io/tags/google-analytics/</link>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/tags/hugo/</guid>
+      <guid>https://eliauk2021.github.io/tags/google-analytics/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>themes</title>
-      <link>https://eliauk2021.github.io/tags/themes/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>gravatar</title>
+      <link>https://eliauk2021.github.io/tags/gravatar/</link>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/tags/themes/</guid>
+      <guid>https://eliauk2021.github.io/tags/gravatar/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>development</title>
-      <link>https://eliauk2021.github.io/tags/development/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      <title>hexo theme</title>
+      <link>https://eliauk2021.github.io/tags/hexo-theme/</link>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/tags/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>template</title>
-      <link>https://eliauk2021.github.io/tags/template/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/template/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>jekyll</title>
-      <link>https://eliauk2021.github.io/tags/jekyll/</link>
-      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/jekyll/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>static-site-generator</title>
-      <link>https://eliauk2021.github.io/tags/static-site-generator/</link>
-      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/static-site-generator/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>bootstrap</title>
-      <link>https://eliauk2021.github.io/tags/bootstrap/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/bootstrap/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>css</title>
-      <link>https://eliauk2021.github.io/tags/css/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/css/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>highlight-js</title>
-      <link>https://eliauk2021.github.io/tags/highlight-js/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/highlight-js/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>html</title>
-      <link>https://eliauk2021.github.io/tags/html/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/html/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>js</title>
-      <link>https://eliauk2021.github.io/tags/js/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://eliauk2021.github.io/tags/js/</guid>
+      <guid>https://eliauk2021.github.io/tags/hexo-theme/</guid>
       <description></description>
     </item>
     
     <item>
       <title>responsive</title>
       <link>https://eliauk2021.github.io/tags/responsive/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
       <guid>https://eliauk2021.github.io/tags/responsive/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>syntax-highlighting</title>
-      <link>https://eliauk2021.github.io/tags/syntax-highlighting/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>html elements</title>
+      <link>https://eliauk2021.github.io/tags/html-elements/</link>
+      <pubDate>Thu, 28 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/tags/syntax-highlighting/</guid>
+      <guid>https://eliauk2021.github.io/tags/html-elements/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>markdown</title>
+      <link>https://eliauk2021.github.io/tags/markdown/</link>
+      <pubDate>Thu, 28 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/markdown/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cover image</title>
+      <link>https://eliauk2021.github.io/tags/cover-image/</link>
+      <pubDate>Wed, 13 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/cover-image/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>github theme</title>
+      <link>https://eliauk2021.github.io/tags/github-theme/</link>
+      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/github-theme/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>highlight code</title>
+      <link>https://eliauk2021.github.io/tags/highlight-code/</link>
+      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/highlight-code/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>test</title>
+      <link>https://eliauk2021.github.io/tags/test/</link>
+      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/test/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tag plugins</title>
+      <link>https://eliauk2021.github.io/tags/tag-plugins/</link>
+      <pubDate>Wed, 29 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/tag-plugins/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>social</title>
+      <link>https://eliauk2021.github.io/tags/social/</link>
+      <pubDate>Sun, 17 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/social/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tags</title>
+      <link>https://eliauk2021.github.io/tags/tags/</link>
+      <pubDate>Sat, 16 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/tags/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pagination</title>
+      <link>https://eliauk2021.github.io/tags/pagination/</link>
+      <pubDate>Fri, 15 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/pagination/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dailymotion</title>
+      <link>https://eliauk2021.github.io/tags/dailymotion/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/dailymotion/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>videos integration</title>
+      <link>https://eliauk2021.github.io/tags/videos-integration/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/videos-integration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vimeo</title>
+      <link>https://eliauk2021.github.io/tags/vimeo/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/vimeo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>youtube</title>
+      <link>https://eliauk2021.github.io/tags/youtube/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/youtube/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>chinese</title>
+      <link>https://eliauk2021.github.io/tags/chinese/</link>
+      <pubDate>Wed, 02 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/chinese/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>image gallery</title>
+      <link>https://eliauk2021.github.io/tags/image-gallery/</link>
+      <pubDate>Mon, 18 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/tags/image-gallery/</guid>
       <description></description>
     </item>
     

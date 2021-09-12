@@ -1,110 +1,128 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>山海</title>
+    <title>Coder Memo</title>
     <link>https://eliauk2021.github.io/</link>
-    <description>Recent content on 山海</description>
+    <description>Recent content on Coder Memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 07 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://eliauk2021.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go语言简介</title>
-      <link>https://eliauk2021.github.io/golang/start/</link>
+      <link>https://eliauk2021.github.io/2021/09/go%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B/</link>
       <pubDate>Tue, 07 Sep 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/golang/start/</guid>
+      <guid>https://eliauk2021.github.io/2021/09/go%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B/</guid>
       <description>Go是一种开源系统编程语言，最初作为谷歌内部项目开发，并于2009年发布。
 应用领域  专业的web服务 网络工具和服务器，如Kubernetes和Istio 后端系统 系统组件 强大的命令行实用程序，如docker和hugo 以JSON格式交换数据（来自关系数据库、NoSQL数据库或其他流行的数据存储系统）的应用程序 作为用户所设计的编程语言的编译器和解释器 数据库系统（如CockroachDB）和键/值存储（如etcd  相对于其他编程语言，Go语言有如下优点  Go编译器的默认行为可以捕获大量可能导致bug的愚蠢错误。 GO使用的括号比C、C++或java少，而且没有分号，这使得GO源代码的外观更具可读性，而且不易出错。 Go提供了丰富可靠的标准库。 Go通过goroutines和Channel支持开箱即用的并发性。 Goroutines十分轻量级。可以轻松地在任何现代机器上运行数千个goroutine，而不会出现任何性能问题。 与C不同，Go支持函数式编程。 Go代码是向后兼容的。  </description>
     </item>
     
     <item>
-      <title>Project 1</title>
-      <link>https://eliauk2021.github.io/project/project1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Welcome to Tranquilpeak 0.5.2-BETA</title>
+      <link>https://eliauk2021.github.io/2015/06/welcome-to-tranquilpeak-0.5.2-beta/</link>
+      <pubDate>Mon, 15 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/project/project1/</guid>
-      <description></description>
+      <guid>https://eliauk2021.github.io/2015/06/welcome-to-tranquilpeak-0.5.2-beta/</guid>
+      <description>&lt;p&gt;Tranquilpeak is a gorgeous responsive theme for Hugo blog framework. It has many features and integrated services to improve user experience.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Project 2</title>
-      <link>https://eliauk2021.github.io/project/project2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Who&#39;s using Tranquilpeak Hugo Theme</title>
+      <link>https://eliauk2021.github.io/2015/06/who-is-using-tranquilpeak-hugo-theme/</link>
+      <pubDate>Sun, 14 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/project/project2/</guid>
-      <description></description>
+      <guid>https://eliauk2021.github.io/2015/06/who-is-using-tranquilpeak-hugo-theme/</guid>
+      <description>&lt;p&gt;Here you can find a list of the blogs that use Tranquilpeak theme, with different styles and customizations.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Project 3</title>
-      <link>https://eliauk2021.github.io/project/project3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Elements showcase</title>
+      <link>https://eliauk2021.github.io/2015/05/elements-showcase/</link>
+      <pubDate>Thu, 28 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/project/project3/</guid>
-      <description></description>
+      <guid>https://eliauk2021.github.io/2015/05/elements-showcase/</guid>
+      <description>&lt;p&gt;Check out how Tranquilpeak theme display well HTML elements (title, paragraph, blockquote, table and more..). It&amp;rsquo;s simple and elegant.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Project 4</title>
-      <link>https://eliauk2021.github.io/project/project4/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Cover image showcase</title>
+      <link>https://eliauk2021.github.io/2015/05/cover-image-showcase/</link>
+      <pubDate>Wed, 13 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/project/project4/</guid>
-      <description></description>
+      <guid>https://eliauk2021.github.io/2015/05/cover-image-showcase/</guid>
+      <description>&lt;p&gt;Tranquilpeak integrate a unique &amp;ldquo;cover image&amp;rdquo; feature. Open this post to see how this feature sublimate your article.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Creating a New Theme</title>
-      <link>https://eliauk2021.github.io/post/creating-a-new-theme/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      <title>highlighted code showcase</title>
+      <link>https://eliauk2021.github.io/2015/03/highlighted-code-showcase/</link>
+      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/post/creating-a-new-theme/</guid>
-      <description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
-We&amp;rsquo;ll start with creating a new site with a very basic template.</description>
+      <guid>https://eliauk2021.github.io/2015/03/highlighted-code-showcase/</guid>
+      <description>&lt;p&gt;Tranquilpeak Hugo theme have its own theme to highlight source code. It&amp;rsquo;s based on GitHub theme: simple and elegant. Check out how it sublimate source codes.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>(Hu)go Template Primer</title>
-      <link>https://eliauk2021.github.io/post/goisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      <title>Tags plugins showcase</title>
+      <link>https://eliauk2021.github.io/2014/10/tags-plugins-showcase/</link>
+      <pubDate>Wed, 29 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/post/goisforlovers/</guid>
-      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</description>
+      <guid>https://eliauk2021.github.io/2014/10/tags-plugins-showcase/</guid>
+      <description>&lt;p&gt;This post is used to show how tag plugins are displayed. See &lt;a href=&#34;https://github.com/kakawait/hugo-tranquilpeak-theme/blob/master/docs/user.md#tags&#34;&gt;docs&lt;/a&gt; for more info.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Getting Started with Hugo</title>
-      <link>https://eliauk2021.github.io/post/hugoisforlovers/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      <title>Hidden social section showcase</title>
+      <link>https://eliauk2021.github.io/2014/08/hidden-social-section-showcase/</link>
+      <pubDate>Sun, 17 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/post/hugoisforlovers/</guid>
-      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at installing hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
- Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
+      <guid>https://eliauk2021.github.io/2014/08/hidden-social-section-showcase/</guid>
+      <description>&lt;p&gt;This post is used to show how a site looks if the social section is hidden.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>Migrate from Jekyll</title>
-      <link>https://eliauk2021.github.io/post/migrate-from-jekyll/</link>
-      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
+      <title>Hidden tag section showcase</title>
+      <link>https://eliauk2021.github.io/2014/08/hidden-tag-section-showcase/</link>
+      <pubDate>Sat, 16 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/post/migrate-from-jekyll/</guid>
-      <description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png  should become
-▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
+      <guid>https://eliauk2021.github.io/2014/08/hidden-tag-section-showcase/</guid>
+      <description>&lt;p&gt;This post is used to show how a site looks if the tag section is hidden.&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>关于</title>
-      <link>https://eliauk2021.github.io/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Hidden pagination showcase</title>
+      <link>https://eliauk2021.github.io/2014/08/hidden-pagination-showcase/</link>
+      <pubDate>Fri, 15 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>https://eliauk2021.github.io/about/</guid>
-      <description>Hugo is a fast and modern static site generator written in Go, and designed to make website creation fun again. Hugo is a general-purpose website framework. Technically speaking, Hugo is a static site generator. Unlike systems that dynamically build a page with each visitor request, Hugo builds pages when you create or update your content. Since websites are viewed far more often than they are edited, Hugo is designed to provide an optimal viewing experience for your website’s end users and an ideal writing experience for website authors.</description>
+      <guid>https://eliauk2021.github.io/2014/08/hidden-pagination-showcase/</guid>
+      <description>&lt;p&gt;This post is used to show how a site looks if the pagination is hidden.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Video integrations showcase</title>
+      <link>https://eliauk2021.github.io/2014/08/video-integrations-showcase/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/2014/08/video-integrations-showcase/</guid>
+      <description>&lt;p&gt;Youtube and Vimeo videos are easily integrated thanks to tags plugins. Of course, you can add video other platforms like dailymotion.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>中文測試</title>
+      <link>https://eliauk2021.github.io/2013/10/chinese-test/</link>
+      <pubDate>Wed, 02 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/2013/10/chinese-test/</guid>
+      <description>&lt;p&gt;This is a chinese test post to show you how chinese is displayed.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Image gallery showcase</title>
+      <link>https://eliauk2021.github.io/2013/02/image-gallery-showcase/</link>
+      <pubDate>Mon, 18 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/2013/02/image-gallery-showcase/</guid>
+      <description>&lt;p&gt;And here is the image gallery!&lt;/p&gt;</description>
     </item>
     
   </channel>
