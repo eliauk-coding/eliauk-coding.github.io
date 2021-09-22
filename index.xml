@@ -6,7 +6,16 @@
     <description>Recent content on Coder Memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 13 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://eliauk2021.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 21 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://eliauk2021.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go Channel实现</title>
+      <link>https://eliauk2021.github.io/2021/09/go-channel%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Tue, 21 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://eliauk2021.github.io/2021/09/go-channel%E5%AE%9E%E7%8E%B0/</guid>
+      <description>&lt;p&gt;Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Go处理压缩文件的一种思路</title>
       <link>https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/</link>
