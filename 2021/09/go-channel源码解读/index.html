@@ -7,12 +7,10 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Go处理压缩文件的一种思路",
+  "headline": "Go Channel源码解读",
   
-  "image": "//d1u9biwaxjngwg.cloudfront.net/highlighted-code-showcase/peak-140.jpg",
-  
-  "datePublished": "2021-09-13T00:00:00Z",
-  "dateModified": "2021-09-13T00:00:00Z",
+  "datePublished": "2021-09-21T00:00:00Z",
+  "dateModified": "2021-09-21T00:00:00Z",
   "author": {
     "@type": "Person",
     "name": "Coder Memo",
@@ -22,7 +20,7 @@
   },
   "mainEntityOfPage": { 
     "@type": "WebPage",
-    "@id": "https:\/\/eliauk2021.github.io\/2021\/09\/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF\/" 
+    "@id": "https:\/\/eliauk2021.github.io\/2021\/09\/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB\/" 
   },
   "publisher": {
     "@type": "Organization",
@@ -34,7 +32,7 @@
     }
     
   },
-  "description": "最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。 同时，对压缩文件需要满足以下两点要求：\n",
+  "description": "Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。\n",
   "keywords": []
 }
 
@@ -45,29 +43,25 @@
 <meta name="generator" content="Hugo 0.88.0 with theme Tranquilpeak 0.5.2-BETA">
 <meta name="author" content="Coder Memo">
 <meta name="keywords" content="">
-<meta name="description" content="最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。
-同时，对压缩文件需要满足以下两点要求：">
+<meta name="description" content="Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。">
 
 
-<meta property="og:description" content="最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。
-同时，对压缩文件需要满足以下两点要求：">
+<meta property="og:description" content="Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go处理压缩文件的一种思路">
-<meta name="twitter:title" content="Go处理压缩文件的一种思路">
-<meta property="og:url" content="https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/">
-<meta property="twitter:url" content="https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/">
+<meta property="og:title" content="Go Channel源码解读">
+<meta name="twitter:title" content="Go Channel源码解读">
+<meta property="og:url" content="https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">
+<meta property="twitter:url" content="https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">
 <meta property="og:site_name" content="Coder Memo">
-<meta property="og:description" content="最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。
-同时，对压缩文件需要满足以下两点要求：">
-<meta name="twitter:description" content="最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。
-同时，对压缩文件需要满足以下两点要求：">
+<meta property="og:description" content="Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。">
+<meta name="twitter:description" content="Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。">
 <meta property="og:locale" content="zh-cn">
 
   
-    <meta property="article:published_time" content="2021-09-13T00:00:00">
+    <meta property="article:published_time" content="2021-09-21T00:00:00">
   
   
-    <meta property="article:modified_time" content="2021-09-13T00:00:00">
+    <meta property="article:modified_time" content="2021-09-21T00:00:00">
   
   
   
@@ -79,7 +73,7 @@
   
   
     
-      <meta property="article:tag" content="Golang">
+      <meta property="article:tag" content="Golang runtime">
     
   
 
@@ -99,18 +93,15 @@
 
 
 
-  <meta property="og:image" content="//d1u9biwaxjngwg.cloudfront.net/highlighted-code-showcase/peak-140.jpg">
-  <meta property="twitter:image" content="//d1u9biwaxjngwg.cloudfront.net/highlighted-code-showcase/peak-140.jpg">
 
-
-    <title>Go处理压缩文件的一种思路</title>
+    <title>Go Channel源码解读</title>
 
     <link rel="icon" href="https://eliauk2021.github.io/images/my.jpg">
     
 
     
 
-    <link rel="canonical" href="https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/">
+    <link rel="canonical" href="https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -250,15 +241,15 @@
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title">
-      Go处理压缩文件的一种思路
+      Go Channel源码解读
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time datetime="2021-09-13T00:00:00Z">
+      <time datetime="2021-09-21T00:00:00Z">
         
-  九月 13, 2021
+  九月 21, 2021
 
       </time>
     
@@ -279,312 +270,367 @@
           
           <div class="post-content markdown">
             <div class="main-content-wrap">
-              <p>最近，在工作中遇到一个需求，需要将包含若干图片和JSON文件的文件夹打包并生成压缩文件。
-同时，对压缩文件需要满足以下两点要求：</p>
-<ol>
-<li>完整性：外部对源文件内容进行异常处理(增加、截断和修改)，能够识别此文件格式损坏，无法正确解析；</li>
-<li>不可读：无法使用解压工具进行解压，即使能够解压，也无法识别文件内容；</li>
-</ol>
+              <p>Channel是Go核心的数据结构，是支撑高性能并发编程模型的重要结构。和Goroutine（协程）一起，使得使用Go进行并发编程（concurrent programing）变得十分方便，并且大大降低了并发编程的难度。</p>
 <h1 id="table-of-contents">目录</h1>
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#完整性">完整性</a></li>
-    <li><a href="#不可读">不可读</a></li>
-    <li><a href="#示例代码">示例代码</a></li>
-    <li><a href="#总结">总结</a></li>
+    <li><a href="#go-版本">Go 版本</a></li>
+    <li><a href="#通道操作">通道操作</a></li>
+    <li><a href="#数据结构">数据结构</a>
+      <ul>
+        <li><a href="#不变量">不变量</a></li>
+        <li><a href="#对于缓存通道同样">对于缓存通道，同样</a></li>
+        <li><a href="#大小对齐">大小对齐</a></li>
+      </ul>
+    </li>
+    <li><a href="#通道操作详解">通道操作详解</a></li>
+    <li><a href="#产生panic情况">产生Panic情况</a></li>
+    <li><a href="#永久阻塞情况">永久阻塞情况</a></li>
   </ul>
 </nav>
 
-<h1 id="完整性">完整性</h1>
-<p>针对完整性，我们可以对源压缩文件内容进行hash处理，例如使用MD5算法，生成32位固定长度hash值，
-将hash值和源压缩文件内容一起写入目标压缩文件，文件内容如下：</p>
-<pre><code>目标压缩文件内容=hash值+源压缩文件内容
-</code></pre>
-<p>对源压缩文件内容进行hash处理，采取两种策略：</p>
+<h1 id="go-版本">Go 版本</h1>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">go version go1.17.1 windows/amd64</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h1 id="通道操作">通道操作</h1>
 <ol>
-<li>文件大小&lt;=4M时，对源文件全部内容计算求hash值；</li>
-<li>文件大小&gt;4M时，截取源文件首部512字节长度和尾部512字节长度内容，对截取内容计算求hash值；</li>
+<li>
+<p>调用内置函数close来关闭通道
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">close(ch)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+传入close函数调用的实参必须为一个通道值，并且此通道不能为单向接收的。</p>
+</li>
+<li>
+<p>向通道发送值
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">ch &lt;- v</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+v的元素类型必须与ch能够接收的元素类型一致。ch不能为单向接收通道。&lt;- 称为数据发送操作符</p>
+</li>
+<li>
+<p>从通道接收值
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">&lt;-ch</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+如果一个通道操作不永久阻塞，它总会返回至少一个值，此值的类型为通道ch的元素类型。
+ch不能为单向发送通道。
+&lt;-称为数据接收操作符，和数据发送操作符的表示形式是一样的。</p>
+<p>在大多数场合下，一个数据接收操作可以被认为是一个单值表达式。但是，当一个数据接收操作
+被用做在一个赋值语句中的唯一的源值的时候，它可以返回第二个可选的类型不确定的布尔值返回
+值从而成为一个多值表达式。此类型的不确定的布尔值表示第一个接收到的值是否是在通道被关闭
+前发送的。（可以从一个已关闭的通道中接收到无穷个值。）</p>
+<p>数据接收操作在赋值中被用做源值的例子：
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">v = &lt;-ch
+v, sentBeforeClosed = &lt;-ch</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+</li>
+<li>
+<p>查询一个通道的容量
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">cap(ch)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+</li>
+<li>
+<p>查询一个通道的长度
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">len(ch)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+</li>
 </ol>
-<h1 id="不可读">不可读</h1>
-<p>大多数解压工具，解压流程为：从文件头读取，读取到固定Header后，开始解压处理。所以即使在源压缩文件首部增加hash值，
-仍可被解压并读取原始内容。</p>
-<p>我们可以对源文件内容进行加密处理，例如使用AES加密算法，保证数据不可读且加密前后的字节长度一致。</p>
-<p>注：AES加密算法比较耗费CPU资源和内存。若服务部署资源有限，需要控制压缩文件的大小，例如可以单个控制图片的大小</p>
-<h1 id="示例代码">示例代码</h1>
+<h1 id="数据结构">数据结构</h1>
+<p>Go语言的Channel在运行时使用runtime.hchan结构体表示。<br>
+Channel底层实现是一个 mutex 锁加上一个数据缓存队列（环形队列）、接收数据协程队列和发送数据协程队列：</p>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">// src/runtime/chan.go
+type hchan struct {
+    qcount   uint           // 队列中的所有数据数
+    dataqsiz uint           // 环形队列的大小
+    buf      unsafe.Pointer // 指向大小为 dataqsiz 的数组
+    elemsize uint16         // 元素大小
+    closed   uint32         // 是否关闭
+    elemtype *_type         // 元素类型
+    sendx    uint           // 发送索引
+    recvx    uint           // 接收索引
+    recvq    waitq          // recv 等待队列，即（ &lt;-ch ）
+    sendq    waitq          // send 等待队列，即（ ch&lt;- ）
+
+    // lock 保护 hchan 中的所有字段，以及在此channel上阻塞的 sudog 中的一些字段
+    // 当持有这个lock时不要改变另一个G的状态（特别是，不要 ready 一个G），因为这
+    // 可能deadlock（死锁）堆栈收缩
+    lock mutex
+}
+
+type waitq struct {
+    first *sudog
+    last*sudog
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>其中recvq和sendq分别是sudog的一个链式队列，其元素是一个包含当前队Goroutine及其要在Channel
+中发送的数据的一个封装。</p>
+<h2 id="不变量">不变量</h2>
+<p>c.sendq（接收数据协程队列）和 c.recvq（发送数据协程队列） 至少有一个是空的，
+除了带有单个goroutine的无缓冲通道的情况使用select语句阻止发送和接收，在这种
+情况下，c.sendq和c.recvq的长度仅受select语句的大小</p>
+<h2 id="对于缓存通道同样">对于缓存通道，同样</h2>
+<p>c.qcount &gt; 0 表示 c.recvq（接收数据协程队列） 为空；<br>
+c.qcount &lt; c.dataqsiz 表示 c.sendq（发送数据协程队列） 为空</p>
+<h2 id="大小对齐">大小对齐</h2>
+<p>
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">const maxAlign = 8
+// 将hchan的大小对齐
+const hchanSize = unsafe.Sizeof(hchan{}) &#43; uintptr(-int(unsafe.Sizeof(hchan{}))&amp;(maxAlign-1))  </code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+注：64位平台下大小为96字节；32位平台下大小为48字节</p>
+<h1 id="通道操作详解">通道操作详解</h1>
+<p>通道被归为三类：</p>
 <ol>
-<li>处理压缩文件：</li>
+<li>零值（nil）通道；</li>
+<li>非零值但已关闭的通道；</li>
+<li>非零值并且尚未关闭的通道。</li>
 </ol>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>hashZipFile.go</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">// hashZipFile To avoid zip file being read,we need to hash file
-func (s *boardService) hashZipFile(zipFile, targetFile string) error {
-    buf, err := ioutil.ReadFile(zipFile)
-    if err != nil {
-        return err
-    }
-
-    hashStr := &#34;&#34;
-    const constMSize = 4 * 1024 * 1024 // 4M字节数量
-    if len(buf) &lt;= constMSize {
-        hashStr = Md5Sum(string(buf))
-    } else {
-        tmpBuf := buf[:512]
-        tmpBuf = append(tmpBuf, buf[len(buf)-512:len(buf)]...)
-        hashStr = Md5Sum(string(tmpBuf))
-    }
-    f, err := os.Create(targetFile)
-    if err != nil {
-        return err
-    }
-    defer func(f *os.File) {
-        err := f.Close()
-        if err != nil {
-            fmt.Println(err.Error())
-        }
-    }(f)
-    // encryption
-    const AESKEY = &#34;sdjfhskdfjdskfaj&#34; // AES加密算法key
-    encryptBuf, err := AESEncrypt(buf, []byte(AESKEY))
-    if err != nil {
-        return err
-    }
-    _, err = io.Copy(f, strings.NewReader(hashStr&#43;string(encryptBuf)))
-    if err != nil {
-        fmt.Println(err.Error())
-        return err
-    }
-    return err
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<ol start="2">
-<li>解析已处理压缩文件：</li>
-</ol>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>hashZipFile.go</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">// unHashZipFile
-func (s *boardService) unHashZipFile(srcFile, zipFile string) error {
-    const HashHeaderLen = 32
-    buf, err := ioutil.ReadFile(srcFile)
-    if err != nil {
-        return err
-    }
-    headBuf := buf[:HashHeaderLen]
-    encryptBuf := buf[HashHeaderLen:len(buf)]
-    const AESKEY = &#34;sdjfhskdfjdskfaj&#34; // AES加密算法key
-    contentBuf, err := AESDecrypt(encryptBuf, []byte(AESKEY))
-    if err != nil {
-        return err
-    }
-    hashStr := &#34;&#34;
-    const constMSize = 4*1024*1024 // 4M字节数量
-    if len(contentBuf) &lt;= constMSize {
-        hashStr = Md5Sum(string(contentBuf))
-    } else {
-        tmpBuf := contentBuf[:512]
-        tmpBuf = append(tmpBuf, contentBuf[len(contentBuf)-512:len(contentBuf)]...)
-        hashStr = Md5Sum(string(tmpBuf))
-    }
-    if string(headBuf) != hashStr {
-        return errors.New(&#34;文件已被损坏&#34;)
-    }
-    f, err := os.Create(zipFile)
-    if err != nil {
-        return err
-    }
-    defer func(f *os.File) {
-        err := f.Close()
-        if err != nil {
-            fmt.Println(err)
-        }
-    }(f)
-    _, err = io.Copy(f, strings.NewReader(string(contentBuf)))
-    if err != nil {
-        return err
-    }
-    return nil
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<ol start="3">
-<li>MD5算法：</li>
-</ol>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>Md5Sum.go</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">func Md5Sum(raw string) string {
-    m := md5.New()
-    io.WriteString(m, raw)
-    return fmt.Sprintf(&#34;%x&#34;, m.Sum(nil))
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<ol start="4">
-<li>AES加密算法：</li>
-</ol>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>AESEncrypt.go</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">// AESEncrypt - The key argument should be the AES key,
-//              either 16, 24, or 32 bytes to select
-//              AES-128, AES-192, or AES-256.
-func AESEncrypt(payload, key []byte) ([]byte, error) {
-    var iv = key[:aes.BlockSize]
-    encrypted := make([]byte, len(payload))
-    block, err := aes.NewCipher(key)
-    if err != nil {
-        return nil, err
-    }
-    enc := cipher.NewCFBEncrypter(block, iv)
-    enc.XORKeyStream(encrypted, payload)
-    return encrypted, nil
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<ol start="5">
-<li>AES解密算法：</li>
-</ol>
-
-  
-    
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-      <span>AESDecrypt.go</span>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">// AESDecrypt - The key argument should be the AES key,
-//              either 16, 24, or 32 bytes to select
-//              AES-128, AES-192, or AES-256.
-func AESDecrypt(encrypted, key []byte) ([]byte, error) {
-    var err error
-    var block cipher.Block
-    var iv = key[:aes.BlockSize]
-    decrypted := make([]byte, len(encrypted))
-    if block, err = aes.NewCipher(key); err != nil {
-        return nil, err
-    }
-    decrypter := cipher.NewCFBDecrypter(block, iv)
-    decrypter.XORKeyStream(decrypted, encrypted)
-    return decrypted, nil
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-<h1 id="总结">总结</h1>
+<p>下表简单地描述了三种通道操作施加到三类通道的结果</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th>一个零值nil通道</th>
+<th>一个非零值但已关闭的通道</th>
+<th>一个非零值尚未关闭的通道</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">关闭</td>
+<td>产生panic</td>
+<td>产生panic</td>
+<td>成功关闭</td>
+</tr>
+<tr>
+<td style="text-align:center">发送数据</td>
+<td>永久阻塞</td>
+<td>产生panic</td>
+<td>阻塞或者成功发送</td>
+</tr>
+<tr>
+<td style="text-align:center">接收数据</td>
+<td>永久阻塞</td>
+<td>永不阻塞</td>
+<td>阻塞或者成功接收</td>
+</tr>
+</tbody>
+</table>
+<h1 id="产生panic情况">产生Panic情况</h1>
 <ol>
-<li>对源压缩文件内容加密保证了文件即使被解压后无法识别文件内容；</li>
-<li>对源压缩文件内容计算求hash值保证文件完整性，文件被异常处理后就无法正确解析；</li>
+<li>makechan：size out of range</li>
+<li>close为nil的chan</li>
+<li>send已经close的chan</li>
+<li>close已经close的chan</li>
+</ol>
+<h1 id="永久阻塞情况">永久阻塞情况</h1>
+<ol>
+<li>向一个nil通道发送数据</li>
+<li>从一个nil通道接收数据</li>
 </ol>
               
 
@@ -599,7 +645,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">标签</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://eliauk2021.github.io/tags/golang/">Golang</a>
+  <a class="tag tag--primary tag--small" href="https://eliauk2021.github.io/tags/golang-runtime/">Golang runtime</a>
 
                   </div>
                 
@@ -612,7 +658,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" data-tooltip="Go Channel源码解读" aria-label="下一篇: Go Channel源码解读">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -620,7 +666,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B/" data-tooltip="Go语言简介" aria-label="上一篇: Go语言简介">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/" data-tooltip="Go处理压缩文件的一种思路" aria-label="上一篇: Go处理压缩文件的一种思路">
           
               <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
               <i class="fa fa-angle-right"></i>
@@ -638,7 +684,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/" title="分享到 Twitter" aria-label="分享到 Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" title="分享到 Twitter" aria-label="分享到 Twitter">
           <i class="fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
@@ -669,9 +715,9 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
     </div>
     <script type="text/javascript">
       var disqus_config = function() {
-        this.page.url = 'https:\/\/eliauk2021.github.io\/2021\/09\/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF\/';
+        this.page.url = 'https:\/\/eliauk2021.github.io\/2021\/09\/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB\/';
         
-          this.page.identifier = '\/2021\/09\/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF\/'
+          this.page.identifier = '\/2021\/09\/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB\/'
         
       };
       (function() {
@@ -707,7 +753,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
       
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" data-tooltip="Go Channel源码解读" aria-label="下一篇: Go Channel源码解读">
+            <a class="post-action-btn btn btn--disabled">
           
               <i class="fa fa-angle-left"></i>
               <span class="hide-xs hide-sm text-small icon-ml">下一篇</span>
@@ -715,7 +761,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
         </li>
         <li class="post-action">
           
-            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B/" data-tooltip="Go语言简介" aria-label="上一篇: Go语言简介">
+            <a class="post-action-btn btn btn--default tooltip--top" href="https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/" data-tooltip="Go处理压缩文件的一种思路" aria-label="上一篇: Go处理压缩文件的一种思路">
           
               <span class="hide-xs hide-sm text-small icon-mr">上一篇</span>
               <i class="fa fa-angle-right"></i>
@@ -733,7 +779,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
     </li>
     
       <li class="post-action hide-xs">
-        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://eliauk2021.github.io/2021/09/go%E5%A4%84%E7%90%86%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%80%E7%A7%8D%E6%80%9D%E8%B7%AF/" title="分享到 Twitter" aria-label="分享到 Twitter">
+        <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://eliauk2021.github.io/2021/09/go-channel%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" title="分享到 Twitter" aria-label="分享到 Twitter">
           <i class="fa-twitter" aria-hidden="true"></i>
         </a>
       </li>
@@ -764,7 +810,7 @@ func AESDecrypt(encrypted, key []byte) ([]byte, error) {
   <ul class="share-options">
     
       <li class="share-option">
-        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Feliauk2021.github.io%2F2021%2F09%2Fgo%25E5%25A4%2584%25E7%2590%2586%25E5%258E%258B%25E7%25BC%25A9%25E6%2596%2587%25E4%25BB%25B6%25E7%259A%2584%25E4%25B8%2580%25E7%25A7%258D%25E6%2580%259D%25E8%25B7%25AF%2F" aria-label="分享到 Twitter">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Feliauk2021.github.io%2F2021%2F09%2Fgo-channel%25E6%25BA%2590%25E7%25A0%2581%25E8%25A7%25A3%25E8%25AF%25BB%2F" aria-label="分享到 Twitter">
           <i class="fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
         </a>
       </li>
