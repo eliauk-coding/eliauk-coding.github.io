@@ -283,6 +283,12 @@
         <li><a href="#大小对齐">大小对齐</a></li>
       </ul>
     </li>
+    <li><a href="#函数解读">函数解读</a>
+      <ul>
+        <li><a href="#reflect_makechan">reflect_makechan</a></li>
+        <li><a href="#创建channel">创建Channel</a></li>
+      </ul>
+    </li>
     <li><a href="#通道操作详解">通道操作详解</a></li>
     <li><a href="#产生panic情况">产生Panic情况</a></li>
     <li><a href="#永久阻塞情况">永久阻塞情况</a></li>
@@ -582,6 +588,79 @@ const hchanSize = unsafe.Sizeof(hchan{}) &#43; uintptr(-int(unsafe.Sizeof(hchan{
 </figure>
 
 注：64位平台下大小为96字节；32位平台下大小为48字节</p>
+<h1 id="函数解读">函数解读</h1>
+<h2 id="reflect_makechan">reflect_makechan</h2>
+<p>
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">//go:linkname reflect_makechan reflect.makechan
+
+func reflect_makechan(t *chantype, size int) *hchan {
+    return makechan(t, size)
+
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+特别：go:linkname引导编译器将当前（私有）方法或者变量在编译时链接到指定的位置的方法或者变量。第一个参数
+表示当前方法或变量，第二个参数表示目标方法或变量，因为这样指令会破坏系统和包的模块化，因此在使用时必须导入
+unsafe</p>
+<p>这里如果我们在实际编程中调用reflect.makechan方法，实际会调用此reflect_makechan方法</p>
+<h2 id="创建channel">创建Channel</h2>
+<p>Channel的创建语句由编译器完成如下翻译工作：<br>
+make(chan type, size) =&gt; makechan(type, size)或makechan64(type, size)<br>
+编译器会根据size的大小决定调用makechan还是makechan64</p>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func makechan64(t *chantype, size int64)*hchan {
+    if int64(int(size)) != size {
+        panic(plainError(&#34;makechan: size out of range&#34;))
+  }
+    return makechan(t, int(size))
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Channel并不严格支持int64大小的缓冲，当make(chan type, size)中size为int64类型时，运行时的实现仅仅只是将其
+强转为int，提供了对int转型是否成功的检查</p>
+<p>创建Channel最重要的操作就是初始化hchan结构体并为buf分配内存空间</p>
 <h1 id="通道操作详解">通道操作详解</h1>
 <p>通道被归为三类：</p>
 <ol>
