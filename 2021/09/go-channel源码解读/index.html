@@ -283,12 +283,21 @@
         <li><a href="#大小对齐">大小对齐</a></li>
       </ul>
     </li>
-    <li><a href="#函数解读">函数解读</a>
+    <li><a href="#创建channel">创建Channel</a>
       <ul>
-        <li><a href="#reflect_makechan">reflect_makechan</a></li>
-        <li><a href="#创建channel">创建Channel</a></li>
+        <li><a href="#小结">小结</a></li>
       </ul>
     </li>
+    <li><a href="#向channel发送数据">向Channel发送数据</a>
+      <ul>
+        <li><a href="#向一个nil-channel-发送数据">向一个nil channel 发送数据</a></li>
+        <li><a href="#直接发送">直接发送</a></li>
+        <li><a href="#写入缓冲区">写入缓冲区</a></li>
+        <li><a href="#阻塞发送">阻塞发送</a></li>
+      </ul>
+    </li>
+    <li><a href="#从channel接收数据">从Channel接收数据</a></li>
+    <li><a href="#关闭channel">关闭Channel</a></li>
     <li><a href="#通道操作详解">通道操作详解</a></li>
     <li><a href="#产生panic情况">产生Panic情况</a></li>
     <li><a href="#永久阻塞情况">永久阻塞情况</a></li>
@@ -588,46 +597,12 @@ const hchanSize = unsafe.Sizeof(hchan{}) &#43; uintptr(-int(unsafe.Sizeof(hchan{
 </figure>
 
 注：64位平台下大小为96字节；32位平台下大小为48字节</p>
-<h1 id="函数解读">函数解读</h1>
-<h2 id="reflect_makechan">reflect_makechan</h2>
-<p>
-  
-  
-  
-  
-
-
-<figure class="highlight  language-">
-  <figcaption>
-    
-  </figcaption>
-  <table>
-    <tbody>
-      <tr>
-        <td class="gutter">
-          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre>
-        </td>
-        <td class="code">
-          <pre class="code-highlight language- "><code class="">//go:linkname reflect_makechan reflect.makechan
-
-func reflect_makechan(t *chantype, size int) *hchan {
-    return makechan(t, size)
-
-}</code></pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</figure>
-
-特别：go:linkname引导编译器将当前（私有）方法或者变量在编译时链接到指定的位置的方法或者变量。第一个参数
-表示当前方法或变量，第二个参数表示目标方法或变量，因为这样指令会破坏系统和包的模块化，因此在使用时必须导入
-unsafe</p>
-<p>这里如果我们在实际编程中调用reflect.makechan方法，实际会调用此reflect_makechan方法</p>
-<h2 id="创建channel">创建Channel</h2>
-<p>Channel的创建语句由编译器完成如下翻译工作：<br>
-make(chan type, size) =&gt; makechan(type, size)或makechan64(type, size)<br>
-编译器会根据size的大小决定调用makechan还是makechan64</p>
+<h1 id="创建channel">创建Channel</h1>
+<p>Channel的创建语句由编译器完成如下翻译工作：make(chan type, size) =&gt; makechan(type, size)或makechan64(type, size)，
+编译器会根据size的大小决定调用makechan还是makechan64。</p>
+<p>Channel并不严格支持int64大小的缓冲，当make(chan type, size)中size为int64类型时，运行时的实现仅仅只是将其
+强转为int，提供了对int转型是否成功的检查。<br>
+makechan64的实现如下：
 
   
   
@@ -657,10 +632,421 @@ make(chan type, size) =&gt; makechan(type, size)或makechan64(type, size)<br>
     </tbody>
   </table>
 </figure>
+</p>
+<p>makechan的实现如下：
 
-<p>Channel并不严格支持int64大小的缓冲，当make(chan type, size)中size为int64类型时，运行时的实现仅仅只是将其
-强转为int，提供了对int转型是否成功的检查</p>
-<p>创建Channel最重要的操作就是初始化hchan结构体并为buf分配内存空间</p>
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func makechan(t *chantype, size int)*hchan {
+    elem := t.elem
+    ...
+    mem, overflow := math.MulUintptr(elem.size, uintptr(size))
+    if overflow || mem &gt; maxAlloc-hchanSize || size &lt; 0 {
+        panic(plainError(&#34;makechan: size out of range&#34;))
+    }
+
+    var c *hchan
+    switch {
+    case mem == 0:
+        c = (*hchan)(mallocgc(hchanSize, nil, true)) 
+        c.buf = c.raceaddr()
+    case elem.ptrdata == 0:
+        c = (*hchan)(mallocgc(hchanSize&#43;mem, nil, true))
+        c.buf = add(unsafe.Pointer(c), hchanSize)
+    default:
+        c = new(hchan)
+        c.buf = mallocgc(mem, elem, true)
+    }
+    c.elemsize = uint16(elem.size)
+    c.elemtype = elem
+    c.dataqsiz = uint(size)
+    lockInit(&amp;c.lock, lockRankHchan)
+    ...
+    return c
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<h2 id="小结">小结</h2>
+<p>创建Channel最重要的操作就是初始化hchan结构体并为buf分配内存空间。</p>
+<ol>
+<li>检查Channel的容量是否溢出，内存溢出则会panic；</li>
+<li>如果队列或者元素大小为零，意味着当前Channel不存在缓冲区，那么就会为hchan分配一段内存空间。</li>
+<li>如果队列或者元素大小不为零，意味着当前Channel存在缓冲区，且元素不包含指针，那么就会在一次调用中分配
+hchan和buf；</li>
+<li>默认情况下，元素包含指针，两次分配，单独为hchan和buf分配内存；</li>
+<li>初始化hchan的elemsize、elemtype和dataqsiz字段。</li>
+</ol>
+<p>另外：reflect_makechan方法与Channel创建也有关：
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">//go:linkname reflect_makechan reflect.makechan
+func reflect_makechan(t *chantype, size int) *hchan {
+    return makechan(t, size)
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+go:linkname引导编译器将当前（私有）方法或者变量在编译时链接到指定的位置的方法或者变量。第一个参数
+表示当前方法或变量，第二个参数表示目标方法或变量，因为这样指令会破坏系统和包的模块化，因此在使用时必须导入
+unsafe。<br>
+如果我们在编程中调用reflect.makechan方法，实际会调用此reflect_makechan方法。</p>
+<h1 id="向channel发送数据">向Channel发送数据</h1>
+<p>向Channel发送数据时，我们会调用&lt;-操作符，编译器经过如下处理：
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">ch &lt;- v =&gt; chansend1(ch, v)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+本质上会调用chansend函数：
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">//go:nosplit
+func chansend1(c *hchan, elem unsafe.Pointer) {
+    chansend(c, elem, true, getcallerpc())
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+注：chansend函数的block参数为true，意味着阻塞式发送数据，如果我们使用select发送数据，则为非阻塞式。
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">// 编译器实现
+//
+//	select {
+//	case c &lt;- v:
+//		... foo
+//	default:
+//		... bar
+//	}
+//
+// as
+//
+//	if selectnbsend(c, v) {
+//		... foo
+//	} else {
+//		... bar
+//	}
+//
+func selectnbsend(c *hchan, elem unsafe.Pointer) (selected bool) {
+	return chansend(c, elem, false, getcallerpc())
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</p>
+<p>Channel的实现比较复杂，将分成四部分：</p>
+<h2 id="向一个nil-channel-发送数据">向一个nil channel 发送数据</h2>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+    if c == nil {
+        if !block {
+            return false
+        }
+        gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)
+        throw(&#34;unreachable&#34;)
+    }
+    ...
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<ol>
+<li>如果非阻塞式向一个nil channel发送数据，会返回false，发送失败；</li>
+<li>如果阻塞式向一个nil channel发送数据，会调用gopark，gopark会将当前的goroutine休眠，从而造成死锁崩溃。</li>
+</ol>
+<h2 id="直接发送">直接发送</h2>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+    ...
+    if !block &amp;&amp; c.closed == 0 &amp;&amp; full(c) {
+        return false
+    }
+
+    var t0 int64
+    if blockprofilerate &gt; 0 {
+        t0 = cputicks()
+    }
+
+    lock(&amp;c.lock)
+
+    if c.closed != 0 {
+        unlock(&amp;c.lock)
+        panic(plainError(&#34;send on closed channel&#34;))
+    }
+
+    if sg := c.recvq.dequeue(); sg != nil {
+        // Found a waiting receiver. We pass the value we want to send
+        // directly to the receiver, bypassing the channel buffer (if any).
+        send(c, sg, ep, func() { unlock(&amp;c.lock) }, 3)
+        return true
+    }
+    ...
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="写入缓冲区">写入缓冲区</h2>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+    ...
+    if c.qcount &lt; c.dataqsiz {
+        // Space is available in the channel buffer. Enqueue the element to send.
+        qp := chanbuf(c, c.sendx)
+        if raceenabled {
+            racenotify(c, c.sendx, nil)
+        }
+        typedmemmove(c.elemtype, qp, ep)
+        c.sendx&#43;&#43;
+        if c.sendx == c.dataqsiz {
+            c.sendx = 0
+        }
+        c.qcount&#43;&#43;
+        unlock(&amp;c.lock)
+        return true
+    }
+
+    if !block {
+        unlock(&amp;c.lock)
+        return false
+    }
+    ...
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2 id="阻塞发送">阻塞发送</h2>
+
+  
+  
+  
+  
+
+
+<figure class="highlight  language-">
+  <figcaption>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language- "><code class="">func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+    ...
+    gp := getg()
+    mysg := acquireSudog()
+    mysg.releasetime = 0
+    if t0 != 0 {
+        mysg.releasetime = -1
+    }
+    // No stack splits between assigning elem and enqueuing mysg
+    // on gp.waiting where copystack can find it.
+    mysg.elem = ep
+    mysg.waitlink = nil
+    mysg.g = gp
+    mysg.isSelect = false
+    mysg.c = c
+    gp.waiting = mysg
+    gp.param = nil
+    c.sendq.enqueue(mysg)
+    // Signal to anyone trying to shrink our stack that we&#39;re about
+    // to park on a channel. The window between when this G&#39;s status
+    // changes and when we set gp.activeStackChans is not safe for
+    // stack shrinking.
+    atomic.Store8(&amp;gp.parkingOnChan, 1)
+    gopark(chanparkcommit, unsafe.Pointer(&amp;c.lock), waitReasonChanSend, traceEvGoBlockSend, 2)
+    // Ensure the value being sent is kept alive until the
+    // receiver copies it out. The sudog has a pointer to the
+    // stack object, but sudogs aren&#39;t considered as roots of the
+    // stack tracer.
+    KeepAlive(ep)
+
+    // someone woke us up.
+    if mysg != gp.waiting {
+        throw(&#34;G waiting list is corrupted&#34;)
+    }
+    gp.waiting = nil
+    gp.activeStackChans = false
+    closed := !mysg.success
+    gp.param = nil
+    if mysg.releasetime &gt; 0 {
+        blockevent(mysg.releasetime-t0, 2)
+    }
+    mysg.c = nil
+    releaseSudog(mysg)
+    if closed {
+        if c.closed == 0 {
+            throw(&#34;chansend: spurious wakeup&#34;)
+        }
+        panic(plainError(&#34;send on closed channel&#34;))
+    }
+    return true
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<h1 id="从channel接收数据">从Channel接收数据</h1>
+<h1 id="关闭channel">关闭Channel</h1>
 <h1 id="通道操作详解">通道操作详解</h1>
 <p>通道被归为三类：</p>
 <ol>
